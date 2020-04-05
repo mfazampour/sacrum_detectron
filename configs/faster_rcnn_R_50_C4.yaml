@@ -1,12 +1,12 @@
-_BASE_: "Base-RCNN-FPN.yaml"
+_BASE_: "Base-RCNN-C4.yaml"
 MODEL:
-  # WEIGHTS: "detectron2://COCO-Detection/faster_rcnn_R_50_FPN_3x/137849458/model_final_280758.pkl"
+  WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
   MASK_ON: False
   RESNETS:
     DEPTH: 50
   ROI_HEADS:
-    BATCH_SIZE_PER_IMAGE: 32
-    NUM_CLASSES: 1  # only has one class (licenseplate)
+    BATCH_SIZE_PER_IMAGE: 16
+    NUM_CLASSES: 1  # only has one class
 DATALOADER:
   NUM_WORKERS: 2
 INPUT:
@@ -17,6 +17,6 @@ DATASETS:
   TEST: ('sacrum_test',)
 SOLVER:
   IMS_PER_BATCH: 80
-  STEPS: (500, 1000, 1500)
+  STEPS: (1000, 1500)
   MAX_ITER: 2000
   WARMUP_ITERS: 100

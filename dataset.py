@@ -84,7 +84,7 @@ if __name__ == "__main__":
     ap.add_argument("--split", default="test")
     ap.add_argument("--samples", type=int, default=10)
     ap.add_argument("--scale", type=float, default=1.0)
-    ap.add_argument("--path", type=str, default="../datasets", metavar='DIR')
+    ap.add_argument("--path", type=str, default="../dataset", metavar='DIR')
     args = ap.parse_args()
 
     dataset_name = f"sacrum_{args.split}"

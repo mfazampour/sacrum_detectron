@@ -12,8 +12,9 @@ from trainer import Trainer
 
 def main(args):
     # Register sacrum dataset
-    register_sacrum_voc("sacrum_train", "../datasets", "train")
-    register_sacrum_voc("sacrum_test", "../datasets", "test")
+    register_sacrum_voc("sacrum_train", "../dataset", "train")
+    register_sacrum_voc("sacrum_test", "../dataset", "test")
+    register_sacrum_voc("sacrum_validation", "../dataset", "validation")
 
     # Setup model configuration
     cfg = setup_cfg(args)
@@ -46,3 +47,5 @@ if __name__ == "__main__":
         dist_url=args.dist_url,
         args=(args,),
     )
+
+    exit(0)

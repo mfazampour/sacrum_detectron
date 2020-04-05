@@ -1,9 +1,11 @@
 import random
-import cv2
+# import cv2
+from PIL import Image
 
 from detectron2.utils.visualizer import Visualizer
 from detectron2.engine import DefaultPredictor
 from detectron2.data import DatasetCatalog, MetadataCatalog
+from detectron2.data import detection_utils as utils
 
 from dataset import register_sacrum_voc
 from config import setup_cfg
@@ -42,25 +44,29 @@ def main(args):
         args.opts.append(str(args.confidence_threshold))
 
     dataset_name = "sacrum_test"
-    register_sacrum_voc(dataset_name, "../datasets", "train")
+    register_sacrum_voc(dataset_name, "../dataset", "test")
     cfg = setup_cfg(args)
     predictor = DefaultPredictor(cfg)
     dataset_dicts = DatasetCatalog.get(dataset_name)
-    samples = random.sample(dataset_dicts, args.samples)
+    # samples = random.sample(dataset_dicts, args.samples)
+    samples = dataset_dicts
     for idx, (d) in enumerate(samples):
-        img = cv2.imread(d["file_name"])
+        # img = cv2.imread(d["file_name"])
+        img = utils.read_image(d["file_name"], format=cfg.INPUT.FORMAT)
         prediction = predictor(img)
         visualizer = Visualizer(img[:, :, ::-1],
                                 metadata=MetadataCatalog.get(dataset_name),
                                 scale=args.scale)
         vis = visualizer.draw_instance_predictions(prediction["instances"].to("cpu"))
-        writer.add_image(d["file_name"], np.transpose(vis.get_image(), axes=[2, 0, 1]))
+        writer.add_image(d["file_name"], np.transpose(vis.get_image(), axes=[2, 0, 1]), global_step=idx)
         # cv2.imshow(dataset_name, vis.get_image()[:, :, ::-1])
         #
         # # Exit? Press ESC
         # if cv2.waitKey(0) & 0xFF == 27:
         #     break
 
+    print("done")
+    return
     # cv2.destroyAllWindows()
 
 
@@ -70,3 +76,4 @@ if __name__ == "__main__":
     print("Command Line Args:", args)
 
     main(args)
+    exit(0)
